@@ -1,10 +1,12 @@
 import Foundation
 
-class NewsRepository: ObservableObject {
-    @Published var newsList: [NewsArticle] = [
-        NewsArticle(article_id: "0", title: "1", creator: ["1"], pubDate: "1", link: "1"),
-        NewsArticle(article_id: "1", title: "2", creator: ["2"], pubDate: "2", link: "2")
-    ]
+protocol INewsRepository: ObservableObject {
+    var newsList: [NewsArticle] { get }
+    func fetchNews() async
+}
+
+class NewsRepository: INewsRepository {
+    @Published var newsList: [NewsArticle] = []
 
     private let apiKey = "pub_39332bed0999c71020298563c5e2d02b6e018"
     private let url = "https://newsdata.io/api/1/news?q=TaylorSwift&apikey="
@@ -27,6 +29,7 @@ class NewsRepository: ObservableObject {
                     return try? decoder.decode(NewsArticle.self, from: jsonData)
                 }
                 DispatchQueue.main.async {
+                    print(newsArticles)
                     self.newsList = newsArticles
                 }
             }
