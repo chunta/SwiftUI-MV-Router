@@ -7,7 +7,7 @@ struct NewsArticle: Identifiable, Decodable {
     let creator: [String]?
     let pubDate: String?
     let link: String?
-    
+
     enum CodingKeys: String, CodingKey {
         case article_id
         case title
